@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign In - Course Feedback</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+		}
+		.container {
+			background: white;
+			border-radius: 20px;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+			padding: 40px;
+			max-width: 600px;
+			width: 100%;
+		}
+		h1 { color:#333; text-align:center; margin-bottom:10px; font-size:2em; }
+		.subtitle { text-align:center; color:#666; margin-bottom:30px; font-size:1em; }
+		.form-group { margin-bottom:25px; }
+		label { display:block; margin-bottom:8px; color:#333; font-weight:600; font-size:14px; }
+		input[type="text"], input[type="email"], input[type="password"] {
+			width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; font-family:inherit; transition:border-color .3s;
+		}
+		input:focus { outline:none; border-color:#667eea; }
+		button { width:100%; padding:15px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:transform .2s, box-shadow .2s; }
+		button:hover { transform:translateY(-2px); box-shadow:0 10px 20px rgba(102,126,234,.4); }
+		.message { padding:12px; border-radius:10px; margin-bottom:20px; text-align:center; font-weight:600; }
+		.success { background:#d4edda; color:#155724; }
+		.error { background:#f8d7da; color:#721c24; }
+		.link { text-align:center; margin-top:15px; }
+		.link a { color:#667eea; font-weight:600; text-decoration:none; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>🔐 Sign In</h1>
+		<p class="subtitle">Enter your details to continue to feedback</p>
+
+		<div id="msg"></div>
+
+		<form id="loginForm">
+			<div class="form-group">
+				<label for="name">Name *</label>
+				<input type="text" id="name" required>
+			</div>
+			<div class="form-group">
+				<label for="email">Email *</label>
+				<input type="email" id="email" required>
+			</div>
+			<div class="form-group">
+				<label for="registerNo">Register No *</label>
+				<input type="text" id="registerNo" required>
+			</div>
+			<div class="form-group">
+				<label for="year">Year *</label>
+				<input type="text" id="year" required>
+			</div>
+			<div class="form-group">
+				<label for="department">Department *</label>
+				<input type="text" id="department" required>
+			</div>
+			<div class="form-group">
+				<label for="password">Password *</label>
+				<input type="password" id="password" required>
+			</div>
+		<button type="submit">Continue</button>
+	</form>
+</div>
+
+	<script>
+		(function init(){
+			try {
+				const info = JSON.parse(localStorage.getItem('studentInfo')||'null');
+				const auth = JSON.parse(localStorage.getItem('auth')||'null');
+				if (info) {
+					document.getElementById('name').value = info.name || '';
+					document.getElementById('email').value = info.email || '';
+					document.getElementById('registerNo').value = info.registerNo || '';
+					document.getElementById('year').value = info.year || '';
+					document.getElementById('department').value = info.department || '';
+				}
+				if (auth) {
+					document.getElementById('password').value = auth.password || '';
+				}
+			} catch {}
+		})();
+
+		document.getElementById('loginForm').addEventListener('submit', (e)=>{
+			e.preventDefault();
+			const msg = document.getElementById('msg');
+			const name = document.getElementById('name').value.trim();
+			const email = document.getElementById('email').value.trim();
+			const registerNo = document.getElementById('registerNo').value.trim();
+			const year = document.getElementById('year').value.trim();
+			const department = document.getElementById('department').value.trim();
+			const password = document.getElementById('password').value;
+
+			if (!name || !email || !registerNo || !year || !department || !password) {
+				msg.innerHTML = '<div class="message error">Please fill all required fields.</div>';
+				return;
+			}
+
+			const studentInfo = { name, email, registerNo, year, department };
+			const auth = { email, password };
+			localStorage.setItem('studentInfo', JSON.stringify(studentInfo));
+			localStorage.setItem('auth', JSON.stringify(auth));
+
+			msg.innerHTML = '<div class="message success">Signed in successfully. Redirecting...</div>';
+			setTimeout(()=>{ window.location.href = 'index.html'; }, 600);
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Feedback System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+
+        .rating-option label {
+            display: block;
+            padding: 12px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .rating-option label:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .view-results {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .view-results a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .view-results a:hover {
+            color: #764ba2;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Course Feedback</h1>
+        <p class="subtitle">Help us improve our course!</p>
+        
+        <div id="message"></div>
+
+        <form id="feedbackForm">
+            <div id="identityInfo" class="message" style="display: none;"></div>
+
+            <div id="identitySection">
+                <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerNo">Register No *</label>
+                    <input type="text" id="registerNo" name="registerNo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year *</label>
+                    <input type="text" id="year" name="year" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department *</label>
+                    <input type="text" id="department" name="department" required>
+                </div>
+
+            </div>
+
+            <!-- Course should be given on every submission -->
+            <div class="form-group">
+                <label for="course">Course Name *</label>
+                <input type="text" id="course" name="course" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Overall Rating *</label>
+                <div class="rating-group">
+                    <div class="rating-option">
+                        <input type="radio" id="excellent" name="rating" value="Excellent" required>
+                        <label for="excellent">Excellent</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="good" name="rating" value="Good" required>
+                        <label for="good">Good</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="average" name="rating" value="Average" required>
+                        <label for="average">Average</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="poor" name="rating" value="Poor" required>
+                        <label for="poor">Poor</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="feedback">Your Feedback *</label>
+                <textarea id="feedback" name="feedback" required placeholder="Share your thoughts about the course..."></textarea>
+            </div>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+
+        <div class="view-results">
+            <a href="results.html">View Feedback Results →</a>
+        </div>
+    </div>
+
+        <script src="config.js"></script>
+        <script>
+        // Prefill and hide identity after first submission using localStorage
+        const identitySection = document.getElementById('identitySection');
+        const identityInfo = document.getElementById('identityInfo');
+
+        function loadSavedIdentity() {
+            const saved = localStorage.getItem('studentInfo');
+            const auth = localStorage.getItem('auth');
+            if (!saved) {
+                // Require sign-in before feedback page
+                window.location.href = 'login.html';
+                return null;
+            }
+            const info = JSON.parse(saved);
+            // Prefill fields (kept hidden) for safety
+            if (document.getElementById('name')) document.getElementById('name').value = info.name || '';
+            if (document.getElementById('email')) document.getElementById('email').value = info.email || '';
+            if (document.getElementById('registerNo')) document.getElementById('registerNo').value = info.registerNo || '';
+            if (document.getElementById('year')) document.getElementById('year').value = info.year || '';
+            if (document.getElementById('department')) document.getElementById('department').value = info.department || '';
+
+            identitySection.style.display = 'none';
+            identityInfo.style.display = 'none';
+
+            return info;
+        }
+
+        // Initialize on load
+        loadSavedIdentity();
+
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const messageDiv = document.getElementById('message');
+
+            // If identity is saved (section hidden), use saved details + current rating/feedback
+            const saved = localStorage.getItem('studentInfo');
+            let payload;
+            if (saved && identitySection.style.display === 'none') {
+                const info = JSON.parse(saved);
+                const rating = (document.querySelector('input[name="rating"]:checked') || {}).value || '';
+                const feedback = document.getElementById('feedback').value || '';
+                const course = document.getElementById('course').value.trim();
+                payload = { ...info, course, rating, feedback };
+            } else {
+                // Collect all fields and then save identity for next submissions
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const registerNo = document.getElementById('registerNo').value.trim();
+                const year = document.getElementById('year').value.trim();
+                const department = document.getElementById('department').value.trim();
+                const rating = (document.querySelector('input[name="rating"]:checked') || {}).value || '';
+                const feedback = document.getElementById('feedback').value || '';
+
+                const course = document.getElementById('course').value.trim();
+                const studentInfo = { name, email, registerNo, year, department };
+                localStorage.setItem('studentInfo', JSON.stringify(studentInfo));
+                payload = { ...studentInfo, course, rating, feedback };
+            }
+
+            try {
+                const response = await fetch(`${window.API_BASE_URL || 'http://localhost:8080'}/api/submit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    messageDiv.innerHTML = '<div class="message success">Thank you for your feedback! ✓</div>';
+                    // Keep identity fields; just clear rating/feedback for next submission
+                    const checked = document.querySelector('input[name="rating"]:checked');
+                    if (checked) checked.checked = false;
+                    document.getElementById('feedback').value = '';
+                    // Ensure identity remains hidden for subsequent feedbacks
+                    loadSavedIdentity();
+                    setTimeout(() => { messageDiv.innerHTML = ''; }, 2500);
+                } else {
+                    messageDiv.innerHTML = '<div class="message error">Error submitting feedback. Please try again.</div>';
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="message error">Unable to connect to server. Please try again later.</div>';
+            }
+        });
+        </script>
+</body>
+</html>
+
+
+
+
